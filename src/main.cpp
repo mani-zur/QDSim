@@ -2,9 +2,11 @@
 
 int main(){
     Simulation sim = Simulation(100, 1);
-    for(int i = 0; i < 50 ; i++){
-        sim.Simulate(1E-3);
-        sim.WriteFile();
-        }
+    sim.WriteFile();
+    for(int i = 0; i < 50000 ; i++){
+        sim.Simulate(1E-5);
+        sim.WriteFileDAT();
+        if (i % 100 == 99) sim.WriteFile();
+    }
     return 0;
 }

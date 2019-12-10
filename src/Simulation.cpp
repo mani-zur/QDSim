@@ -14,11 +14,11 @@ Simulation::Simulation(int tN, int tn){
     {
         x[i] = (double)i/N;
         Fr[i] = sqrt(2) * sin(n * M_PI * x[i]);
-        cout << x[i]  << " : "<< Fr[i] << endl;
         Fi[i] = 0;
     }
     CalcultateHamiltonian();
-    file.open("bin/stats.out", ofstream::out | ofstream::trunc);
+    file_out.open("bin/stats.out", ofstream::out | ofstream::trunc);
+    file_dat.open("bin/stats.dat", ofstream::out | ofstream::trunc);
 }
 
 void Simulation::CalcultateHamiltonian(){
@@ -41,11 +41,11 @@ void Simulation::Simulate(const double dt){
     for(int i = 0 ; i <= N; i++){
         Fr[i] += Hi[i]*dt/2;
     }
+    t += dt;
 }
 
 void Simulation::WriteFile(){
     double tmp_N = 0, tmp_x = 0, tmp_E = 0;
-    cout << tmp_N << endl;
     for(int i = 0; i <= N; i++){
         tmp_N += Fr[i] * Fr[i] + Fi[i] * Fi[i]; 
         tmp_x += x[i] * (Fr[i] * Fr[i] + Fi[i] * Fi[i]);
@@ -54,8 +54,17 @@ void Simulation::WriteFile(){
     tmp_N = tmp_N /N;
     tmp_x = tmp_x /N;
     tmp_E = tmp_E /N;
-    if (file.is_open()) file << tmp_N << "," << tmp_x << "," << tmp_E << endl;
+    if (file_out.is_open()) file_out << t <<",\t" << tmp_N << ",\t" << tmp_x << ",\t" << tmp_E << endl;
     else cerr << "File error" << endl;
+}
+
+void Simulation::WriteFileDAT(){
+    if (file_dat.is_open()){
+        for( int i = 0; i <= N; i++){
+            file_dat << Fr[i]*Fr[i] + Fi[i]*Fi[i] << ", \t";
+        }
+        file_dat << endl;
+    }
 }
 
 Simulation::~Simulation(){
@@ -64,5 +73,6 @@ Simulation::~Simulation(){
     delete [] Fi;
     delete [] Hr;
     delete [] Hi;
-    file.close();
+    file_out.close();
+    file_dat.close();
 }
