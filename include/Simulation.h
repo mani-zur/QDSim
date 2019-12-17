@@ -8,9 +8,9 @@
 class Simulation
 {
 private:
-    const double K = 1;
-    const double omega = 1;
-    const double tau = 1;
+    const double K = 0;//1;
+    const double omega = 0;//(3*M_PI*M_PI)/2;
+    double tau;
     double * x, * Fr, * Fi, * Hr, * Hi;
     double t = 0;
     int n ,N ;
@@ -19,8 +19,8 @@ private:
     void CalcultateHamiltonian();
 
 public:
-    Simulation(int tN, int tn);
-    void Simulate(const double dt);
+    Simulation(int tN, int tn, double dt);
+    void Simulate();
     void WriteFile();
     void WriteFileDAT();
     ~Simulation();
